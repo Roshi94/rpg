@@ -10,7 +10,7 @@ if (file_exists($file)) {
 
 if (file_exists($file)) {
 
-    include_once('cache/globaldefs.php');
+    require_once($file);
 
 } else {
     $getSettings = $db->prepare("SELECT * FROM `settings` WHERE `globaldef`=1");
@@ -30,7 +30,7 @@ if (file_exists($file)) {
     fputs($fp, $data);
     fclose($fp);
 
-    include_once('cache/globaldefs.php');
+    require_once($file);
     if (defined('GLOBALDEF_LANGUAGE')) {
 
         header("Refresh:0");
@@ -39,7 +39,6 @@ if (file_exists($file)) {
 
         echo "ERROR: Set a language (nl or en) in your settings table";
 
-        $file = 'cache/globaldefs.php';
         if (file_exists($file)) {
             unlink($file);
         }

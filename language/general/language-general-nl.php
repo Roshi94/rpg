@@ -133,7 +133,7 @@
     $txt['new_event'] = 'een nieuw evenement';
 
     #Login
-    $txt['login_login'] = 'Login';
+    $txt['title_login'] = 'Login';
     $txt['login_username'] = 'Speelnaam';
     $txt['login_password'] = 'Password';
     $txt['login_log_in'] = 'Login';

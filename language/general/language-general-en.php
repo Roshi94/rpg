@@ -133,7 +133,7 @@
     $txt['new_event'] = 'a new event';
 
     #Login
-    $txt['login_login'] = 'Login';
+    $txt['title_login'] = 'Login';
     $txt['login_username'] = 'Username';
     $txt['login_password'] = 'Password';
     $txt['login_log_in'] = 'Login';

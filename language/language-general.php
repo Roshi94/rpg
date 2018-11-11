@@ -5,9 +5,9 @@ $language_array = array("nl","en");
 if(in_array(GLOBALDEF_LANGUAGE, $language_array)){
 
     #Load language
-    include('general/language-general-'.GLOBALDEF_LANGUAGE.'.php');
+    require_once('general/language-general-'.GLOBALDEF_LANGUAGE.'.php');
 } else {
 
     #Load language
-    include('general/language-general-en.php');
+    require_once('general/language-general-en.php');
 }

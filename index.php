@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 date_default_timezone_set('Europe/Amsterdam');
 
@@ -8,18 +8,21 @@ if (version_compare(phpversion(), '5.6.31', '<')) {
     exit;
 }
 
-include_once('includes/config.php');
-include_once('includes/ingame.inc.php');
-include_once('includes/globaldefs.php');
-include_once('language/language-general.php');
+require_once('includes/config.php');
+require_once('includes/ingame.inc.php');
+require_once('includes/globaldefs.php');
+require_once('language/language-general.php');
 
 #process the login
 if(isset($_POST['login'])) {
-    include("includes/login.php");
+    require_once("includes/login.php");
 }
 
 #Get current page
-$page = $_GET['page'];
+$page = '';
+if(isset($_GET['page']) && $_GET['page'] !== ''){
+    $page = $_GET['page'];
+}
 
 if(empty($_SESSION['id'])) {
     $linkpartnersql = $db->query('SELECT titel, url FROM `linkpartners` ORDER BY volgorde ASC');
@@ -50,7 +53,7 @@ if(isset($_SESSION['id'])){
     #Controleren van de hash.
     #Is de has niet goed dan uitloggen en inloggen opnieuw laden
     if ($_SESSION['hash'] <> $md5hash){
-        include('logout.php');
+        require_once('logout.php');
     }
 
     $setOnline = "UPDATE `gebruikers` SET `online`='".time()."' WHERE `user_id`=:user_id";
@@ -326,13 +329,25 @@ if(isset($gebruiker)) {
     $duel_sql->execute();
 }
 
-#?page= systeem opbouwen
-if(empty($page)) header("Location: ?page=home");
-elseif(!file_exists($page.'.php')) $page = 'notfound';
-elseif(empty($_SESSION['id'])) $page = $page;
-elseif($page == 'attack/tour_fight') $page = $page;
-elseif($page == 'attack/wild2/wild-attack') $page = $page;
-else{
+/**
+ * Build page system
+ **/
+if(empty($page)) {
+
+    $page = 'home';
+} elseif(!file_exists($page.'.php')) {
+
+    $page = 'notfound';
+} elseif(empty($_SESSION['id'])) {
+
+    $page = $page;
+} elseif($page == 'attack/tour_fight') {
+
+    $page = $page;
+} elseif($page == 'attack/wild2/wild-attack') {
+
+    $page = $page;
+} else {
 
     $duelCheckQuery = $db->prepare("SELECT `id` FROM `duel` WHERE `status`='wait' AND `uitdager`=:naam");
     $duelCheckQuery->bindParam(':naam', $_SESSION['naam'], PDO::PARAM_STR);
@@ -738,15 +753,15 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                     </div>
                     <div class="box-btm"></div>
                     <?
-                    if($_GET['page'] != "register"
-                        AND $_GET['page'] != "forgot-username"
-                        AND $_GET['page'] != "forgot-password"
-                        AND $_GET['page'] != "information"
-                        AND $_GET['page'] != "forum-categories"
-                        AND $_GET['page'] != "statistics"
-                        AND $_GET['page'] != "rankinglist"
-                        AND $_GET['page'] != "contact"
-                        AND $_GET['page'] != "news"){
+                    if(isset($_GET['page']) && $_GET['page'] != "register"
+                        && $_GET['page'] != "forgot-username"
+                        && $_GET['page'] != "forgot-password"
+                        && $_GET['page'] != "information"
+                        && $_GET['page'] != "forum-categories"
+                        && $_GET['page'] != "statistics"
+                        && $_GET['page'] != "rankinglist"
+                        && $_GET['page'] != "contact"
+                        && $_GET['page'] != "news"){
                         ?>
                         <div class="box-top"></div>
                         <div class="box-title">
@@ -757,7 +772,7 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                         <div class="box-con">
                             <div class="news"></div>
                             <div class="teksts">
-                                <?php include('news.php'); ?>
+                                <?php require_once('news.php'); ?>
                             </div>
                         </div>
                         <div class="box-btm"></div>
@@ -831,10 +846,10 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                 <div class="box-con">
                     <div class="rel"></div>
                     <div class="teksts">
-                        <?php if (isset($page)) {
-                            include($page . '.php');
+                        <?php if(isset($page) && $page !== '') {
+                            require_once($page . '.php');
                         }else{
-                            include('404.php');
+                            require_once('404.php');
                         } ?>
                     </div>
                 </div>
@@ -965,7 +980,7 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                 <?php if(empty($_SESSION['id'])){ ?>
                     <div class="sb-title">
                         <span class="icon"><span class="icon-user"></span></span>
-                        <h3><?php echo $txt['title_login']; ?></h3></div>
+                        <h3><?=$txt['title_login']?></h3></div>
                     <div class="sb-con">
 
 
