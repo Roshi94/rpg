@@ -116,4 +116,3 @@
 		$txt['event_for'] = 'voor';
 		$txt['event_silver_from_tf'] = 'silver van de transfer list gekocht.';
 	}
-?>

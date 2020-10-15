@@ -1,5 +1,6 @@
 <?
-function create_new_attack($computer_id, $computer_level, $gebied) {
+function create_new_attack($computer_id, $computer_level, $gebied)
+{
 
     global $db;
 
@@ -46,7 +47,8 @@ function create_new_attack($computer_id, $computer_level, $gebied) {
     return $attack_info;
 }
 
-function create_aanval_log($gebied) {
+function create_aanval_log($gebied)
+{
 
     global $db;
 
@@ -62,7 +64,8 @@ function create_aanval_log($gebied) {
     $_SESSION['attack']['aanval_log_id'] = $attackLog;
 }
 
-function save_attack($attack_info) {
+function save_attack($attack_info)
+{
 
     global $db;
 
@@ -88,7 +91,8 @@ function save_attack($attack_info) {
     unset($saveAttack);
 }
 
-function who_can_start($attack_info) {
+function who_can_start($attack_info)
+{
 
     global $db;
 
@@ -103,7 +107,7 @@ function who_can_start($attack_info) {
     //Alle pokemon opzak stuk voor stuk behandelen
     foreach ($opzaksql as $opzak) {
         //Kijken als het level groter dan 0 is
-        if (($opzak['leven'] >= 1) AND ($opzak['ei'] == 0)) {
+        if (($opzak['leven'] >= 1) and ($opzak['ei'] == 0)) {
             //Elke keer nummer met 1 verhogen
             $nummer++;
             //Is het nummer 1
@@ -129,7 +133,8 @@ function who_can_start($attack_info) {
     return $attack_info;
 }
 
-function create_player($attack_info) {
+function create_player($attack_info)
+{
 
     global $db;
 
@@ -160,7 +165,8 @@ function create_player($attack_info) {
     unset($saveAttack);
 }
 
-function create_new_computer($computer_id, $computer_level) {
+function create_new_computer($computer_id, $computer_level)
+{
 
     global $db;
 
@@ -182,7 +188,8 @@ function create_new_computer($computer_id, $computer_level) {
     return $computer;
 }
 
-function save_new_computer($new_computer, $computer_level) {
+function save_new_computer($new_computer, $computer_level)
+{
 
     global $db;
 
@@ -220,7 +227,8 @@ function save_new_computer($new_computer, $computer_level) {
     return $attack_info;
 }
 
-function create_new_computer_stats($new_computer, $new_computer_sql, $computer_level) {
+function create_new_computer_stats($new_computer, $new_computer_sql, $computer_level)
+{
     //Iv willekeurig getal tussen 2,15
     //Normaal tussen 1,31 maar wilde pokemon moet wat minder sterk zijn
     $attack_iv = rand(2, 15);
@@ -240,7 +248,8 @@ function create_new_computer_stats($new_computer, $new_computer_sql, $computer_l
     return $new_computer;
 }
 
-function create_new_computer_pokemon($new_computer_sql, $computer_id, $computer_level) {
+function create_new_computer_pokemon($new_computer_sql, $computer_id, $computer_level)
+{
 
     global $db;
 
@@ -280,7 +289,7 @@ function create_new_computer_pokemon($new_computer_sql, $computer_id, $computer_
                     elseif (empty($new_computer['aanval4'])) $new_computer['aanval4'] = $groei['aanval'];
                     //Er is geen ruimte, dan willekeurig een aanval kiezen en plaatsen
                     else {
-                        if (($new_computer['aanval1'] != $groei['aanval']) AND ($new_computer['aanval2'] != $groei['aanval']) AND ($new_computer['aanval3'] != $groei['aanval']) AND ($new_computer['aanval4'] != $groei['aanval'])) {
+                        if (($new_computer['aanval1'] != $groei['aanval']) and ($new_computer['aanval2'] != $groei['aanval']) and ($new_computer['aanval3'] != $groei['aanval']) and ($new_computer['aanval4'] != $groei['aanval'])) {
                             $nummer = rand(1, 4);
                             if ($nummer == 1) $new_computer['aanval1'] = $groei['aanval'];
                             elseif ($nummer == 2) $new_computer['aanval2'] = $groei['aanval'];

@@ -8,14 +8,22 @@ if (version_compare(phpversion(), '5.6.31', '<')) {
     exit;
 }
 
-require_once('includes/config.php');
-require_once('includes/ingame.inc.php');
-require_once('includes/globaldefs.php');
-require_once('language/language-general.php');
+include('includes/config.php');
+include('includes/ingame.inc.php');
+include('includes/globaldefs.php');
+include('language/language-general.php');
 
-#process the login
+#process login
 if(isset($_POST['login'])) {
-    require_once("includes/login.php");
+    include("includes/login.php");
+}
+#process logout
+if($_GET['page'] === 'logout'){
+    #destroy session
+    session_destroy();
+    #redirect user to the index
+    header("Location: index.php");
+    exit();
 }
 
 #Get current page
@@ -53,7 +61,7 @@ if(isset($_SESSION['id'])){
     #Controleren van de hash.
     #Is de has niet goed dan uitloggen en inloggen opnieuw laden
     if ($_SESSION['hash'] <> $md5hash){
-        require_once('logout.php');
+        include('logout.php');
     }
 
     $setOnline = "UPDATE `gebruikers` SET `online`='".time()."' WHERE `user_id`=:user_id";
@@ -347,6 +355,10 @@ if(empty($page)) {
 } elseif($page == 'attack/wild2/wild-attack') {
 
     $page = $page;
+} elseif($page == 'attack/attack_map') {
+
+    include('attack/attack_include.php');
+    $page = $page;
 } else {
 
     $duelCheckQuery = $db->prepare("SELECT `id` FROM `duel` WHERE `status`='wait' AND `uitdager`=:naam");
@@ -454,7 +466,7 @@ if(isset($gebruiker)) {
     <link type="text/css" media="screen" rel="stylesheet" href="stylesheets/colorbox.css" />
     <link rel="shortcut icon" href="favicon.gif" type="image/x-icon" />
     <script type="text/javascript" src="js/jq.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style-spring.css" />
+    <link rel="stylesheet" type="text/css" href="css/style-christmas.css" />
     <link rel="stylesheet" type="text/css" href="css/jq.ui.css" />
     <link rel="stylesheet" type="text/css" href="css/slider.css" />
     <link rel="stylesheet" type="text/css" href="css/toastr.css" />
@@ -529,7 +541,6 @@ if(isset($_SESSION['id']) and ($gebruiker['admin'] == 3 or getSetting('showExitB
         }
     }
 }
-
 //enable snow
 if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
     <div id="snow"></div>
@@ -772,7 +783,7 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                         <div class="box-con">
                             <div class="news"></div>
                             <div class="teksts">
-                                <?php require_once('news.php'); ?>
+                                <?php include('news.php'); ?>
                             </div>
                         </div>
                         <div class="box-btm"></div>
@@ -847,9 +858,9 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
                     <div class="rel"></div>
                     <div class="teksts">
                         <?php if(isset($page) && $page !== '') {
-                            require_once($page . '.php');
+                            include($page . '.php');
                         }else{
-                            require_once('404.php');
+                            include('404.php');
                         } ?>
                     </div>
                 </div>
@@ -1057,7 +1068,8 @@ if((empty($_SESSION['id']) or $gebruiker['sneeuwaan']) AND 1==2){?>
 
                     <div class="sb-con">
                         <ul class="stats">
-                            <?php while($linkpartner = $linkpartnersql->fetch(PDO::FETCH_ASSOC)){
+                            <?php
+                            while($linkpartner = $linkpartnersql->fetch(PDO::FETCH_ASSOC)){
                                 echo '<li><a href="'.$linkpartner['url'].'">'.$linkpartner['titel'].'</a></li>';
                             }
                             ?>

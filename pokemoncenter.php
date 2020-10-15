@@ -99,7 +99,7 @@ if (isset($_POST['heal'])) {
                 </td>
             </tr>
             <tr>
-                <td width="140" rowspan="8" valign="top"><img src="http://forum.ragezone.com/images/pokemoncenter.gif"></td>
+                <td width="140" rowspan="8" valign="top"><img src="images/pokemoncenter.gif"></td>
                 <td width="60" class="top_first_td" align="center"><input type="checkbox" onClick="checkAll()"></td>
                 <td width="100" class="top_td">
                     <center><?php echo $txt['who']; ?></center>

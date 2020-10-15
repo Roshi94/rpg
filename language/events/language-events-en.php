@@ -124,4 +124,3 @@
 		$txt['event_for'] = 'for';
 		$txt['event_silver_from_tf'] = 'silver from the transfer list.';
 	}
-?>

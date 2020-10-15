@@ -234,10 +234,10 @@ function max_min_price($pokemon) {
 //Check if player can see the page
 function page_timer($page, $timer) {
     $zien = array('home', 'account-options', 'pokemoninfo', 'rankinglist', 'statistics', 'forum-categories', 'forum-threads', 'forum-messages', 'promotion', 'modify-order', 'extended', 'items', 'house', 'pokedex', 'inbox', 'send-message', 'read-message', 'events', 'buddylist', 'blocklist', 'area-messenger', 'search-user', 'profile', 'logout', 'area-market', 'information');
-    if ($timer == 'jail')
+    if ($timer == 'jail') {
         array_push($zien, "jail");
-    if (in_array($page, $zien))
-        return true; else return false;
+    }
+    return in_array($page, $zien);
 }
 
 #Als speler er rank bij krijgt

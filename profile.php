@@ -6,21 +6,15 @@ if (isset($_GET['player'])) {
     include_once('language/language-pages.php');
 
     //Gegevens laden van de ingevoerde gebruiker
-
-    $query = "SELECT g.user_id, g.username, g.youtube, g.profielfoto, g.cover, g.hasStore, g.profilestore, g.views, g.respect, g.datum, 
-                    g.email, g.ip_aangemeld, g.ip_ingelogd, g.silver, g.gold, g.bank, g.premiumaccount, g.admin, g.wereld, g.online, 
-                    CONCAT(g.voornaam,' ',g.achternaam) AS combiname, g.land, g.`character`, g.profiel, g.buddieszien, g.teamzien, 
-                    g.buddy, g.badgeszien, g.rank, g.wereld, g.clan, g.aantalpokemon, g.badges, g.gewonnen, g.verloren,
-                     COUNT(DISTINCT g.user_id) AS 'check', gi.`Badge case`	 FROM gebruikers AS g 
+    $profiel = $db->prepare("SELECT g.user_id, g.username, g.youtube, g.profielfoto, g.cover, g.hasStore, g.profilestore, g.views, g.respect, g.datum, g.email, g.ip_aangemeld, g.ip_ingelogd, g.silver, g.gold, g.bank, g.premiumaccount, g.admin, g.wereld, g.online, CONCAT(g.voornaam,' ',g.achternaam) AS combiname, g.land, g.`character`, g.profiel, g.buddieszien, g.teamzien, g.buddy, g.badgeszien, g.rank, g.wereld, g.clan, g.aantalpokemon, g.badges, g.gewonnen, g.verloren, COUNT(DISTINCT g.user_id) AS 'check', gi.`Badge case`	 FROM gebruikers AS g 
 											INNER JOIN gebruikers_item AS gi 
 											ON g.user_id = gi.user_id
 											WHERE username=:player
 											AND account_code != '0'
-											GROUP BY `user_id`";
-    $stmt = $db->prepare($query);
-    $stmt->bindValue(':player', $_GET['player'], PDO::PARAM_STR);
-    $stmt->execute();
-    $profiel = $stmt->fetch(PDO::FETCH_ASSOC);
+											GROUP BY `user_id`");
+    $profiel->bindParam(':player', $_GET['player'], PDO::PARAM_STR);
+    $profiel->execute();
+    $profiel = $profiel->fetch();
 
     //is er geen player ingevuld dan echo
     if ($profiel['check'] != 1) {
