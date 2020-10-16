@@ -4,16 +4,16 @@
 	
 	#Als je geen pokemon bij je hebt, terug naar index.
 	if($gebruiker['in_hand'] == 0) header('Location: index.php');
-	
+
 	$page = 'extended';
 	#Goeie taal erbij laden voor de page
 	include_once('language/language-pages.php');
 ?>
 
 <center>
-      <?php              
+      <?php
       #Pokemons opzak weergeven op het scherm
-      while($pokemon = mysql_fetch_assoc($pokemon_all)){
+      foreach($pokemon_all as $pokemon){
         #Gegevens juist laden voor de pokemon
         $pokemon = pokemonei($pokemon);
         #Naam veranderen als het male of female is.
@@ -125,7 +125,6 @@
 			<br />
           ';
       	}
-      } 
-      mysql_data_seek($pokemon_sql, 0);
+      }
       ?>
 </center>
