@@ -9,7 +9,8 @@ if(($page == 'home') OR ($page == '')){
 elseif($page == 'notfound'){
     #Not found page
     $txt['pagetitle'] = 'Pagina niet gevonden';
-    $txt['notfoundtext'] = '<p>De pagina is niet gevonden. De pagina waar jij naar zoekt is misschein verwijderd, heeft zijn naam veranderd, of is tijdelijk offline.<br /><br />
+    $txt['notfoundtext'] = '<p>De pagina is niet gevonden. De pagina waar jij naar zoekt is misschien verwijderd, 
+                        heeft zijn naam veranderd, of is tijdelijk offline.<br /><br />
 						<strong>Probeer a.u.b. het volgende:</strong><br /><br />
 						1. Als je het adres hebt ingetypt in de adresbalk, kijk eens of er een fout in zit.<br />
 						2. Zoek de link op de linker en rechter menu\'s.<br />
