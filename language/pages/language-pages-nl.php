@@ -1882,6 +1882,7 @@ elseif($page == 'daycare'){
 ######################## NAME SPECIALIST ########################
 elseif($page == 'name-specialist'){
     #Alerts
+    $txt['alert_no_pokemon_in_hand'] = 'Je hebt geen Pok&eacute;mon bij je.';
     $txt['alert_nothing_selected'] = 'Je hebt geen Pok&eacute;mon geselecteerd.';
     $txt['alert_not_enough_silver'] = 'Je hebt niet genoeg silver.';
     $txt['alert_name_too_long'] = 'Naam mag niet langer als 12 tekens.';

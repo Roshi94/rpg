@@ -1965,6 +1965,7 @@ elseif($page == 'daycare'){
 ######################## NAME SPECIALIST ########################
 elseif($page == 'name-specialist'){
     #Alerts
+    $txt['alert_no_pokemon_in_hand'] = 'There are no Pok&eacute;mon in your team.';
     $txt['alert_nothing_selected'] = 'Please select a Pok&eacute;mon.';
     $txt['alert_not_enough_silver'] = 'You do not have enough silver.';
     $txt['alert_name_too_long'] = 'Please pick a name which isn\'t longer than 12 characters.';

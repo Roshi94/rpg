@@ -871,11 +871,15 @@ function getBans($to, $from, $type) {
 
 function refresh($time = null, $url = null) {
 
-    if ($url != "")
-        echo "<meta http-equiv=\"refresh\" content=\"" . $time . "; URL=" . $url . "\">"; else if ($time != "" && $time >= 0 && $time <= 60)
-        echo "<meta http-equiv=\"refresh\" content=\"" . $time . "\">"; else
-        echo "<meta http-equiv=\"refresh\" content=\"3\">";
-
+    if ($url != "") {
+        echo "<meta http-equiv='refresh' content='{$time}' url='{$url}'>";
+    } else {
+        if ($time != "" && $time >= 0 && $time <= 60) {
+            echo "<meta http-equiv='refresh' content='{$time}'>";
+        } else {
+            echo "<meta http-equiv='refresh' content='3'>";
+        }
+    }
 }
 
 function showAlert($type, $message) {
