@@ -1,5 +1,4 @@
 <?php
-	if(empty($_SESSION['naam'])){
+	if(empty($_SESSION['id'])){
 		header('Location: ?page=error');
 	}
-?>
