@@ -48,34 +48,59 @@ if (isset($_POST['verkoop'])) {
             $show = '<img src="images/icons/silver.png" title="Silver"> ' . $price;
         }
 
+        $amount = -1;
         if ($select['soort'] == "tm") {
-            $lessTM = $db->prepare("UPDATE `gebruikers_tmhm` SET `:name`=`:name`-:amount WHERE `user_id`=:uid");
-            $lessTM->bindValue(':name', $_POST['name'], PDO::PARAM_STR);
-            $lessTM->bindValue(':amount', $_POST['amount'], PDO::PARAM_INT);
-            $lessTM->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
-            $lessTM->execute();
+            $selectSQL = $db->prepare("SELECT * FROM `gebruikers_tmhm` WHERE user_id=:uid");
+            $selectSQL->bindParam(':uid', $_SESSION['id'], PDO::PARAM_INT);
+            $selectSQL->execute();
+            $select = $selectSQL->fetch();
+
+            // does the item exist in the user table
+            if(isset($select[$_POST['name']])){
+                $amount = $select[$_POST['name']]-$_POST['amount'];
+            }
+            if($amount >= 0){
+                $lessTM = $db->prepare("UPDATE `gebruikers_tmhm` SET {$_POST['name']}=:amount WHERE `user_id`=:uid");
+                $lessTM->bindValue(':amount', $amount, PDO::PARAM_INT);
+                $lessTM->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
+                $lessTM->execute();
+            } else {
+                $error = '<div class="red">' . $txt['alert_too_much_items_selected'] . '</div>';
+            }
         } else {
-            $lessItem = $db->prepare("UPDATE `gebruikers_item` SET `:name`=`:name`-:amount WHERE `user_id`=:uid");
-            $lessItem->bindValue(':amount', $_POST['amount'], PDO::PARAM_INT);
-            $lessItem->bindValue(':name', $_POST['name'], PDO::PARAM_STR);
-            $lessItem->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
-            $lessItem->execute();
+            $selectSQL = $db->prepare("SELECT * FROM `gebruikers_item` WHERE user_id=:uid");
+            $selectSQL->bindParam(':uid', $_SESSION['id'], PDO::PARAM_INT);
+            $selectSQL->execute();
+            $select = $selectSQL->fetch();
+
+            // does the item exist in the user table
+            if(isset($select[$_POST['name']])){
+                $amount = $select[$_POST['name']]-$_POST['amount'];
+            }
+            if($amount >= 0){
+                $lessItem = $db->prepare("UPDATE gebruikers_item SET {$_POST['name']}=:amount WHERE user_id=:uid");
+                $lessItem->bindValue(':amount', $amount, PDO::PARAM_INT);
+                $lessItem->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
+                $result =  $lessItem->execute();
+            } else {
+                $error = '<div class="red">' . $txt['alert_too_much_items_selected'] . '</div>';
+            }
         }
 
-        $updateMoney = $db->prepare("UPDATE `gebruikers` SET `silver`=`silver`+:bedrag, `gold`=`gold`+:bedrag_gold WHERE `user_id`=:uid");
-        $updateMoney->bindValue(':bedrag', $bedrag);
-        $updateMoney->bindValue(':bedrag_gold', $bedrag_gold);
-        $updateMoney->bindValue(':uid', $_SESSION['id']);
-        $updateMoney->execute();
+        if(!isset($error)) {
+            $updateMoney = $db->prepare("UPDATE `gebruikers` SET `silver`=`silver`+:bedrag, `gold`=`gold`+:bedrag_gold WHERE `user_id`=:uid");
+            $updateMoney->bindValue(':bedrag', $bedrag);
+            $updateMoney->bindValue(':bedrag_gold', $bedrag_gold);
+            $updateMoney->bindValue(':uid', $_SESSION['id']);
+            $updateMoney->execute();
 
-        $error = '<div class="green">' . $txt['success_items'] . ' ' . $show . '</div>';
-        #Load new data
-        $itemdataSQL = $db->prepare("SELECT gebruikers_item.*, gebruikers_tmhm.* FROM gebruikers_item INNER JOIN gebruikers_tmhm ON gebruikers_item.user_id = gebruikers_tmhm.user_id WHERE gebruikers_item.user_id = :uid");
-        $itemdataSQL->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
-        $itemdataSQL->execute();
-        $itemdata = $itemdataSQL->fetch(PDO::FETCH_ASSOC);
-
-
+            $error = '<div class="green">' . $txt['success_items'] . ' ' . $show . '</div>';
+            #Load new data
+            $itemdataSQL = $db->prepare("SELECT gebruikers_item.*, gebruikers_tmhm.* FROM gebruikers_item INNER JOIN gebruikers_tmhm ON gebruikers_item.user_id = gebruikers_tmhm.user_id WHERE gebruikers_item.user_id = :uid");
+            $itemdataSQL->bindValue(':uid', $_SESSION['id'], PDO::PARAM_INT);
+            $itemdataSQL->execute();
+            $itemdata = $itemdataSQL->fetch(PDO::FETCH_ASSOC);
+        }
     }
 }
 if (isset($_POST['winkel'])) {
@@ -161,7 +186,10 @@ elseif ($gebruiker['itembox'] == 'Bag') $ruimte['max'] = 20;
     <?php echo '<img src="images/items/' . $gebruiker['itembox'] . '.png"> ' . $txt['title_text_1'] . ' nog <strong>' . $gebruiker['item_over'] . '</strong> van <strong>' . $ruimte['max'] . '</strong> plaatsen vrij. <img src="images/items/' . $gebruiker['itembox'] . '.png">'; ?></center>
 <br/>
 <?
-if ($error) echo $error;
+if (isset($error)) {
+    echo $error;
+    refresh(3);
+}
 $balls = 0;
 $potions = 0;
 $items = 0;
